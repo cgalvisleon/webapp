@@ -13,3 +13,13 @@ npm run dev
 ```
 npm i react-bootstrap bootstrap
 ```
+
+## Git used tags
+
+```
+git tag clase.1
+git push -u origin --tags
+
+Used abbreviation
+git tags
+```
