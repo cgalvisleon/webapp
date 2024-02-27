@@ -1,0 +1,16 @@
+.celsia-btn {
+  border-width: 0px;
+  padding: 4px 8px 4px 8px;
+  margin-right: 16px;
+}
+.celsia-primary {
+  background-color: darkorange;
+  color: red;
+}
+.celsia-primary:hover{
+  background-color: red;
+  color: darkorange;
+}
+.celsia-round {
+  border-radius: 4px;
+}
