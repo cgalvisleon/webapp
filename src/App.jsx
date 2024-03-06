@@ -1,8 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import { GetFormularios } from "./components/api";
+
+const defaultState = {
+  numIdentificacion: "",
+  nombre: "",
+  apellidos: "",
+};
 
 function Apps() {
-  const [count, setCount] = useState(0);
+  const [data, setData] = useState(defaultState);
+  const [formularios, setFormularios] = useState([]);
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await GetFormularios();
+      const { result } = response;
+      const { formularios } = result;
+      const formulario = formularios[idx];
+      setFormularios(formularios);
+      setData(formulario);
+    }
+
+    fetchData();
+  }, []);
+
+  const handlerChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    // setData({ ...data, [name]: value });
+  };
 
   const handlerInsert = () => {
     console.log("Insertar");
@@ -14,6 +42,20 @@ function Apps() {
 
   const handlerDelete = () => {
     console.log("Eliminar");
+  };
+
+  const handlerNext = () => {
+    const _idx = idx + 1;
+    const _data = formularios[_idx];
+    setData(_data);
+    setIdx(_idx);
+  };
+
+  const handlerPrev = () => {
+    const _idx = idx - 1;
+    const _data = formularios[_idx];
+    setData(_data);
+    setIdx(_idx);
   };
 
   return (
@@ -29,6 +71,8 @@ function Apps() {
                   type="text"
                   className="form-control"
                   aria-describedby="basic-addon3 basic-addon4"
+                  value={data.numIdentificacion}
+                  onChange={(e) => handlerChange(e)}
                 />
               </div>
             </div>
@@ -39,6 +83,8 @@ function Apps() {
                   type="text"
                   className="form-control"
                   aria-describedby="basic-addon3 basic-addon4"
+                  value={data.nombre}
+                  onChange={(e) => handlerChange(e)}
                 />
               </div>
             </div>
@@ -49,6 +95,8 @@ function Apps() {
                   type="text"
                   className="form-control"
                   aria-describedby="basic-addon3 basic-addon4"
+                  value={data.apellidos}
+                  onChange={(e) => handlerChange(e)}
                 />
               </div>
             </div>
@@ -56,11 +104,14 @@ function Apps() {
             <div className="mb-3">
               <label className="form-label">Tipo de identificacion</label>
               <div className="input-group">
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                >
+                  <option selected>Seleccione una opción</option>
+                  <option value="1">Cedula</option>
+                  <option value="2">Pasaporte</option>
+                  <option value="3">Cedula de extranjería</option>
                 </select>
               </div>
             </div>
@@ -69,7 +120,7 @@ function Apps() {
             <button
               type="button"
               disabled=""
-              className="btn btn-success"
+              className="btn btn-success me-2"
               onClick={() => handlerInsert()}
             >
               Insertar
@@ -77,7 +128,7 @@ function Apps() {
             <button
               type="button"
               disabled=""
-              className="btn btn-primary"
+              className="btn btn-primary me-2"
               onClick={() => handlerEdit()}
             >
               Editar
@@ -85,10 +136,26 @@ function Apps() {
             <button
               type="button"
               disabled=""
-              className="btn btn-outline-danger"
+              className="btn btn-outline-danger me-2"
               onClick={() => handlerDelete()}
             >
               Eliminar
+            </button>
+            <button
+              type="button"
+              disabled=""
+              className="btn btn-outline-danger me-2"
+              onClick={() => handlerNext()}
+            >
+              Siguiente
+            </button>
+            <button
+              type="button"
+              disabled=""
+              className="btn btn-outline-danger me-2"
+              onClick={() => handlerPrev()}
+            >
+              Anterior
             </button>
           </div>
         </div>
